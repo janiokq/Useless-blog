@@ -1,0 +1,85 @@
+syntax="proto3";
+
+package user;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "用户模块";
+    version: "1.0";
+    contact: {
+      name: "janiokq";
+      url: "https://github.com/janiokq";
+      email: "janiokqf@gmail.com";
+    };
+    license: {
+      name: "MIT";
+    };
+  };
+  schemes: HTTP;
+};
+
+service  UserServer {
+
+  rpc UserLogin(LoginRequset)  returns (UserEntity){
+    option (google.api.http) = {
+      post: "/v1/user/login"
+      body:"*"
+    };
+  }
+
+  rpc UserLogout(UserToken)  returns (UserToken){
+    option (google.api.http) = {
+      post: "/v1/user/logout"
+      body:"*"
+    };
+  }
+
+  rpc UserUpdateInfo(UserEntity) returns (UserEntity){
+    option (google.api.http) = {
+      post: "/v1/user/update"
+      body:"*"
+    };
+  }
+
+}
+
+
+message  UserEntity {
+  //  @inject_tag: db:"id"
+  int64  id = 1 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"用户id"}];
+  //  @inject_tag: db:"created_at"
+  google.protobuf.Timestamp created_at = 2 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"创建时间"}];
+  //  @inject_tag: db:"updated_at"
+  google.protobuf.Timestamp updated_at = 3 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"更新时间"}];
+  //  @inject_tag: db:"name"
+  string name = 4 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"名称"}];
+  //  @inject_tag: db:"avatar_url"
+  string avatar_url = 5 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"头像"}];
+  //  @inject_tag: db:"token" valid:"required~token必须存在"
+  string token = 6 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"用户token"}];
+  //  @inject_tag: db:"phone" valid:"required~phone必须存在"
+  string phone = 7 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"用户手机号"}];
+}
+
+message UserToken {
+  string token = 1;
+}
+
+message LoginRequset {
+  string phone = 1;
+  string password = 2;
+}
+
+
+
+
+
+
+
+
+
+
