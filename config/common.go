@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/janiokq/Useless-blog/pkg/pprof"
 	"github.com/jinzhu/configor"
 	"log"
 )
@@ -103,5 +104,31 @@ func configInit(sn string) {
 var closeArr []string
 
 func InitOption(sn string, args ...string) {
+	//启动pprof
+	pprof.Run()
+	closeArr = args
+	//初始化配置参数
+	configInit(sn)
+	//初始化日志
+	logInit()
+	// 3.其他服务
+	for _, o := range args {
+		switch o {
+		case Trace:
+			tracerInit()
 
+		}
+	}
+}
+
+// 关闭打开的服务
+func Close() {
+	for _, o := range closeArr {
+		switch o {
+		case Trace:
+			// 关闭链路跟踪
+			tracerClose()
+
+		}
+	}
 }

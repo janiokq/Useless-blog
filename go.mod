@@ -9,5 +9,8 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.14.7 // indirect
 	github.com/jinzhu/configor v1.2.0 // indirect
 	github.com/jmoiron/sqlx v1.2.0 // indirect
+	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/nats-io/nats.go v1.10.0 // indirect
+	github.com/opentracing/opentracing-go v1.2.0
+	go.uber.org/zap v1.15.0
 )
