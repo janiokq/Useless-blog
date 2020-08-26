@@ -51,21 +51,21 @@ var Config = struct {
 	Redis struct {
 		Addr     string `default:"127.0.0.1:6379"`
 		Password string `default:""`
-		Db       string `default:"0"`
+		Db       int    `default:"0"`
 	}
 	//Nats config
 	Nats struct {
-		Addr string `default:"127.0.0.1"`
-		Port int    `default:"4443"`
+		Addr string `default:"127.0.0.1:4443"`
 	}
 	//Metrics
 	Metrics struct {
-		Enable   string `default:"yes"`
-		Duration int    `default:"5"`
-		URL      string `default:"http://influxdb:8086"`
-		Database string `default:"test01"`
-		UserName string `default:""`
-		Password string `default:""`
+		Enable      string `default:"yes"`
+		Duration    int    `default:"5"`
+		URL         string `default:"http://influxdb:8086"`
+		Database    string `default:"test01"`
+		UserName    string `default:""`
+		Password    string `default:""`
+		Measurement string `default:""`
 	}
 
 	//User Service
@@ -116,7 +116,14 @@ func InitOption(sn string, args ...string) {
 		switch o {
 		case Trace:
 			tracerInit()
-
+		case MySQL:
+			initMysql()
+		case Redis:
+			redisInit()
+		case Metrics:
+			metricsInit(sn)
+		case Nats:
+			Natsinit()
 		}
 	}
 }
@@ -128,7 +135,14 @@ func Close() {
 		case Trace:
 			// 关闭链路跟踪
 			tracerClose()
-
+		case MySQL:
+			// 关闭mysql
+			closeMysql()
+		case Redis:
+			redisClose()
+		case Metrics:
+		case Nats:
+			Natsclose()
 		}
 	}
 }
