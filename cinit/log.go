@@ -1,4 +1,4 @@
-package config
+package cinit
 
 import (
 	"github.com/janiokq/Useless-blog/internal/utils/logx"

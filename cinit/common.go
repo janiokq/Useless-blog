@@ -1,4 +1,4 @@
-package config
+package cinit
 
 import (
 	"github.com/janiokq/Useless-blog/pkg/pprof"
@@ -12,6 +12,7 @@ const (
 	Redis   = "Redis"
 	Metrics = "Metrics"
 	Nats    = "Nats"
+	Kafka   = "Kafka"
 )
 
 var Config = struct {
@@ -56,6 +57,10 @@ var Config = struct {
 	//Nats config
 	Nats struct {
 		Addr string `default:"127.0.0.1:4443"`
+	}
+	//kafka
+	Kafka struct {
+		Addr string `default:"127.0.0.1:9092"`
 	}
 	//Metrics
 	Metrics struct {
@@ -124,6 +129,9 @@ func InitOption(sn string, args ...string) {
 			metricsInit(sn)
 		case Nats:
 			Natsinit()
+		case Kafka:
+			KafkaInit()
+
 		}
 	}
 }
@@ -143,6 +151,8 @@ func Close() {
 		case Metrics:
 		case Nats:
 			Natsclose()
+		case Kafka:
+			KafkaClose()
 		}
 	}
 }
