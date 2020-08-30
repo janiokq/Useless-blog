@@ -31,8 +31,8 @@ func Configure(serviceName string, options *Options) (io.Closer, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not build trace sampler: %v", err)
 	}
-	if options.jaegerURL != "" {
-		reporters = append(reporters, jaeger.NewRemoteReporter(transport.NewHTTPTransport(options.jaegerURL, transport.HTTPTimeout(httpTimeout))))
+	if options.JaegerURL != "" {
+		reporters = append(reporters, jaeger.NewRemoteReporter(transport.NewHTTPTransport(options.JaegerURL, transport.HTTPTimeout(httpTimeout))))
 	}
 	if options.LogTraceSpans {
 		reporters = append(reporters, logger)

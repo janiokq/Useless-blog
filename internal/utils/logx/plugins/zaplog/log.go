@@ -1,7 +1,7 @@
 package zaplog
 
 import (
-	"github.com/janiokq/Useless-blog/internal/utils/logx/config"
+	"github.com/janiokq/Useless-blog/internal/utils/logx/configlog"
 	"github.com/janiokq/Useless-blog/internal/utils/logx/file"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -32,16 +32,16 @@ func parseLevel(lvl string) zapcore.Level {
 	}
 }
 
-func New(options ...config.Option) *Log {
-	o := &config.Options{
-		LogPath:     config.LogPath,
-		LogName:     config.LogName,
-		LogLevel:    config.LogLevel,
-		MaxSize:     config.MaxSize,
-		MaxAge:      config.MaxAge,
-		Stacktrace:  config.Stacktrace,
-		IsStdOut:    config.IsStdOut,
-		ProjectName: config.ProjectName,
+func New(options ...configlog.Option) *Log {
+	o := &configlog.Options{
+		LogPath:     configlog.LogPath,
+		LogName:     configlog.LogName,
+		LogLevel:    configlog.LogLevel,
+		MaxSize:     configlog.MaxSize,
+		MaxAge:      configlog.MaxAge,
+		Stacktrace:  configlog.Stacktrace,
+		IsStdOut:    configlog.IsStdOut,
+		ProjectName: configlog.ProjectName,
 	}
 
 	for _, opt := range options {

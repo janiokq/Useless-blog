@@ -1,12 +1,17 @@
 package cinit
 
-//var Kf *kafka.Kafka
+import (
+	"github.com/janiokq/Useless-blog/internal/kafka"
+	"strings"
+)
+
+var Kf *kafka.Kafka
 
 func KafkaInit() {
-	//adds :=strings.Split(Config.Kafka.Addr, ",")
-
+	addrs := strings.Split(Config.Kafka.Addr, ",")
+	Kf = kafka.NewKafka(addrs)
 }
 
 func KafkaClose() {
-
+	Kf.Close()
 }
