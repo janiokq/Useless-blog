@@ -1,6 +1,7 @@
 package pprof
 
 import (
+	"github.com/janiokq/Useless-blog/internal/utils/logx"
 	"log"
 	"net/http"
 	"os"
@@ -31,7 +32,7 @@ func Run() {
 		log.Printf("%v", err)
 	}
 	f.Close()
-	log.Print("进程id：", pid)
+	logx.Info("进程id：", pid)
 	var server *http.Server
 	for {
 		select {

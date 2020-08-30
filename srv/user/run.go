@@ -21,7 +21,7 @@ const (
 
 func Run() {
 	//初始化需要的依赖
-	fmt.Println("执行2完毕3322")
+
 	cinit.InitOption(ServiceName, cinit.Trace, cinit.MySQL, cinit.Redis, cinit.Kafka, cinit.Metrics)
 	lis, err := net.Listen("tcp", cinit.Config.SrvUser.Port)
 	if err != nil {
@@ -37,7 +37,6 @@ func Run() {
 			grpc_opentracing.StreamServerInterceptor(),
 		)),
 	)
-	fmt.Println("执行2完毕")
 	pb.RegisterUserServiceServer(s, &Server{})
 	reflection.Register(s)
 	ctx := context.Background()
@@ -54,5 +53,7 @@ func Run() {
 	if err := s.Serve(lis); err != nil {
 		logx.Fatal("failed to listen: " + err.Error())
 	}
+
+	fmt.Println("启动成功")
 
 }

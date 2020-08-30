@@ -1,6 +1,7 @@
 package cinit
 
 import (
+	"fmt"
 	"github.com/janiokq/Useless-blog/pkg/pprof"
 	"github.com/jinzhu/configor"
 	"log"
@@ -25,7 +26,7 @@ var Config = struct {
 	}
 	//tracing
 	Trace struct {
-		Address       string  `default:"http://jaeger:14268/api/traces?format=jaeger.thrift"`
+		Address       string  `default:"http://127.0.0.1:14268/api/traces?format=jaeger.thrift"`
 		SamplingRate  float64 `default:"1"`
 		LogTraceSpans bool    `default:"false"`
 	}
@@ -42,9 +43,9 @@ var Config = struct {
 	Mysql struct {
 		Dbname   string `default:"useless"`
 		Addr     string `default:"127.0.0.1"`
-		User     string `default:"root"`
-		Password string `default:"root"`
-		Port     int    `default:"3306"`
+		User     string `default:"test"`
+		Password string `default:"test"`
+		Port     int    `default:"3307"`
 		IDleConn int    `default:"6"`
 		MaxConn  int    `default:"40"`
 	}
@@ -66,18 +67,18 @@ var Config = struct {
 	Metrics struct {
 		Enable      string `default:"yes"`
 		Duration    int    `default:"5"`
-		URL         string `default:"http://influxdb:8086"`
+		URL         string `default:"http://127.0.0.1:8086"`
 		Database    string `default:"test01"`
 		UserName    string `default:""`
 		Password    string `default:""`
-		Measurement string `default:""`
+		Measurement string `default:"test01"`
 	}
 
 	//User Service
 	SrvUser struct {
-		Port              string `default:"5001"`
+		Port              string `default:":5001"`
 		Address           string `default:"127.0.0.1:5001"`
-		GateWayAddr       string `default:"9999"`
+		GateWayAddr       string `default:":9999"`
 		GateWaySwaggerDir string `default:"/swagger"`
 	}
 
@@ -97,6 +98,7 @@ var Config = struct {
 func configInit(sn string) {
 	err := configor.Load(&Config, "config.yml")
 	if err != nil {
+		fmt.Println("读取配置文件失败")
 		log.Printf("load config error:%+v", err)
 		return
 	}
@@ -110,9 +112,10 @@ var closeArr []string
 
 func InitOption(sn string, args ...string) {
 	//启动pprof
-	pprof.Run()
+	go pprof.Run()
 	closeArr = args
 	//初始化配置参数
+
 	configInit(sn)
 	//初始化日志
 	logInit()
