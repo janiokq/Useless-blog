@@ -3,7 +3,6 @@ package cache
 import (
 	"context"
 	"github.com/janiokq/Useless-blog/cinit"
-	"github.com/janiokq/Useless-blog/internal/utils"
 	"github.com/janiokq/Useless-blog/internal/utils/logx"
 	"github.com/prometheus/common/log"
 	"math/rand"
@@ -16,9 +15,9 @@ const (
 	AgainGetStopTime = 100 * time.Millisecond
 )
 
-func CacheSetbydefaultexpiration(ctx context.Context, prefix string, id int64, data interface{}) {
-	CacheSetHM(ctx, prefix, id, data, KeyMaxExpire)
-}
+//func CacheSetbydefaultexpiration(ctx context.Context, prefix string, id int64, data interface{}) {
+//	CacheSetHM(ctx, prefix, id, &data, KeyMaxExpire)
+//}
 
 func CacheGetHM(ctx context.Context, prefix string, id int64) (map[string]string, error) {
 	k := GetIdKey(prefix, id)
@@ -60,10 +59,9 @@ func CacheSet(ctx context.Context, prefix string, id int64, data interface{}, ma
 	}
 }
 
-func CacheSetHM(ctx context.Context, prefix string, id int64, data interface{}, maxExpire int) {
-	_d := utils.Strcut2Map(data)
+func CacheSetHM(ctx context.Context, prefix string, id int64, data map[string]interface{}, maxExpire int) {
 	_k := GetIdKey(prefix, id)
-	err := cinit.RedisCli.HMSet(_k, _d).Err()
+	err := cinit.RedisCli.HMSet(_k, data).Err()
 	if err != nil {
 		logx.Error(err.Error(), ctx)
 		return

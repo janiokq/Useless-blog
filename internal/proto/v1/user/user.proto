@@ -45,6 +45,20 @@ service  UserService {
     };
   }
 
+  rpc UserRegister(LoginRequset) returns (UserEntity){
+    option (google.api.http) = {
+      post: "/v1/user/register"
+      body:"*"
+    };
+  }
+
+  rpc UserInfo(UserToken) returns (UserEntity){
+    option (google.api.http) = {
+      get:"/v1/user"
+      response_body:"*"
+    };
+  }
+
 }
 
 
@@ -52,9 +66,9 @@ message  UserEntity {
   //  @inject_tag: db:"id"
   int64  id = 1 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"用户id"}];
   //  @inject_tag: db:"created_at"
-  google.protobuf.Timestamp created_at = 2 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"创建时间"}];
+  string create_at = 2 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"创建时间"}];
   //  @inject_tag: db:"updated_at"
-  google.protobuf.Timestamp updated_at = 3 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"更新时间"}];
+  string update_at = 3 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"更新时间"}];
   //  @inject_tag: db:"name"
   string user_name = 4 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {title:"名称"}];
   //  @inject_tag: db:"avatar_url"
@@ -66,12 +80,16 @@ message  UserEntity {
 }
 
 message UserToken {
+  //  @inject_tag: db:"token" valid:"required~token必须存在"
   string token = 1;
+  //  @inject_tag: db:"id" valid:"required~id必须存在"
   int64 id = 2;
 }
 
 message LoginRequset {
+  //  @inject_tag: db:"phone" valid:"required~phone必须存在"
   string phone = 1;
+  //  @inject_tag: db:"password" valid:"required~password必须存在"
   string password = 2;
 }
 

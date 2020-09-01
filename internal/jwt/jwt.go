@@ -12,7 +12,7 @@ var (
 )
 
 type Msg struct {
-	UserID   int64  `json:"userid"`
+	Id       int64  `json:"id"`
 	UserName string `json:"username"`
 }
 

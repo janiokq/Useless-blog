@@ -13,10 +13,16 @@ import (
 
 type Server struct{}
 
-func (s *Server) UserLogin(ctx context.Context, in *pb.LoginRequset) (out *pb.UserEntity, outerr error) {
+func (s *Server) UserRegister(ctx context.Context, in *pb.LoginRequset) (out *pb.UserEntity, outerr error) {
 	m := new(User)
 	out = new(pb.UserEntity)
-	err := m.LoginFormPhoneAndPassword(ctx, in.Phone, in.Password)
+	err := copier.Copy(m, in)
+	if err != nil {
+		outerr = status.Error(codes.InvalidArgument, err.Error())
+		return
+	}
+
+	err = m.Register(ctx)
 	if err != nil {
 		outerr = status.Error(codes.PermissionDenied, err.Error())
 		return
@@ -27,6 +33,51 @@ func (s *Server) UserLogin(ctx context.Context, in *pb.LoginRequset) (out *pb.Us
 		outerr = status.Error(codes.Internal, err.Error())
 		return
 	}
+	return
+}
+
+func (s *Server) UserInfo(ctx context.Context, in *pb.UserToken) (out *pb.UserEntity, outerr error) {
+	m := new(User)
+	out = new(pb.UserEntity)
+	err := copier.Copy(m, in)
+	if err != nil {
+		outerr = status.Error(codes.InvalidArgument, err.Error())
+		return
+	}
+	err = m.LoadDataForId(ctx)
+	if err != nil {
+		outerr = status.Error(codes.Internal, err.Error())
+		return
+	}
+	err = copier.Copy(out, m)
+	if err != nil {
+		logx.Error(err.Error(), ctx)
+		outerr = status.Error(codes.Internal, err.Error())
+		return
+	}
+	return
+}
+
+func (s *Server) UserLogin(ctx context.Context, in *pb.LoginRequset) (out *pb.UserEntity, outerr error) {
+	m := new(User)
+	out = new(pb.UserEntity)
+	err := copier.Copy(m, in)
+	if err != nil {
+		outerr = status.Error(codes.PermissionDenied, err.Error())
+		return
+	}
+	err = m.LoginFormPhoneAndPassword(ctx, in.Phone, in.Password)
+	if err != nil {
+		outerr = status.Error(codes.PermissionDenied, err.Error())
+		return
+	}
+	err = copier.Copy(out, m)
+	if err != nil {
+		logx.Error(err.Error(), ctx)
+		outerr = status.Error(codes.Internal, err.Error())
+		return
+	}
+
 	return
 }
 
